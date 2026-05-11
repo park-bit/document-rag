@@ -1,22 +1,65 @@
 # DocMeant: Local Neural Document Intelligence
 
-**DocMeant** is a high-performance, private, and local RAG (Retrieval-Augmented Generation) system designed for deep document analysis. It runs entirely on your local hardware (optimized for NVIDIA GPUs) ensuring that no sensitive data ever leaves your machine.
+**DocMeant** is a high-performance, private, and local RAG system designed for deep document analysis. It runs entirely on your local hardware (optimized for NVIDIA GPUs) ensuring that no sensitive data ever leaves your machine.
 
 ![Version](https://img.shields.io/badge/version-3.0.0-white?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-white?style=flat-square)
 ![Engine](https://img.shields.io/badge/Engine-PyMuPDF%20|%20FAISS%20|%20Flan--T5--Large-white?style=flat-square)
 
-## 🌑 Noir Experience
-DocMeant features a premium "Noir" themed interface designed for sophisticated document interaction.
+<img width="1918" height="911" alt="image" src="https://github.com/user-attachments/assets/7864b5ca-9ca9-4ece-a4d4-8370be1ee30c" />
+
 
 ### Key Features
 - **Neural Query Console**: Natural language interface to ask complex questions across 50+ page documents.
-- **Autonomous Document Scan**: Deep neural identification of metadata, topics, and subjects.
-- **Entity Target Extraction**: Specify target fields for high-precision data extraction.
-- **Local Neural VRAM**: Fully GPU-accelerated (FP16) using your local RTX hardware.
+- **Autonomous Document Scan**: Deep neural identification of metadata, topics, and subjects.(Little buggy, PR the fix if u can).
+- **Entity Target Extraction**: Specify target fields for high-precision data extraction.(and this one is buggy too :)
+- **Local Neural VRAM**: Fully GPU-accelerated (FP16) using your local RTX hardware.(My laptop was burning)
 - **Offline First**: Zero cloud dependencies. Works completely offline using local weights.
+```mermaid
+flowchart TD
 
-## 🛠 Tech Stack
+  subgraph Primary_App["Primary App"]
+    web_ui["Web UI<br/>Next.js frontend<br/>page.js"]
+    web_layout["App shell<br/>Next.js layout<br/>layout.js"]
+    api_main["API server<br/>FastAPI entrypoint<br/>main.py"]
+    api_schemas["Contracts<br/>Pydantic schemas<br/>schemas.py"]
+    api_limits{"Rate limit<br/>request control<br/>rate_limit.py"}
+
+    doc_ocr["Text extraction<br/>OCR + parsing<br/>ocr.py"]
+    embedder["Embeddings<br/>sentence-transformers<br/>embeddings.py"]
+    retriever["RAG core<br/>retrieval orchestration<br/>rag.py"]
+    generator["LLM model<br/>Flan-T5 generator<br/>model.py"]
+  end
+
+  subgraph Mirror_Copy["Packaged Mirror"]
+    mirror_backend["Mirror backend<br/>packaged FastAPI copy<br/>main.py"]
+    mirror_frontend["Mirror UI<br/>packaged Next.js copy<br/>page.js"]
+  end
+
+  web_layout -->|"renders"| web_ui
+  web_ui -->|"API calls"| api_main
+
+  api_main -->|"validates"| api_schemas
+  api_main -->|"guards"| api_limits
+
+  api_main -->|"ingests"| doc_ocr
+  doc_ocr -->|"chunks"| embedder
+  embedder -->|"indexes"| retriever
+
+  api_main -->|"queries"| retriever
+  retriever -->|"context"| generator
+  api_main -->|"answers"| generator
+
+  mirror_backend -.->|"mirrors"| api_main
+  mirror_frontend -.->|"mirrors"| web_ui
+
+  classDef blue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
+  classDef amber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+
+  class web_ui,web_layout,api_main,api_schemas,api_limits,doc_ocr,embedder,retriever,generator blue
+  class mirror_backend,mirror_frontend amber
+```
+##  Tech Stack
 - **Frontend**: Next.js (React), Vanilla CSS (Noir System)
 - **Backend**: FastAPI (Python 3.11)
 - **Neural Brain**: 
@@ -25,7 +68,7 @@ DocMeant features a premium "Noir" themed interface designed for sophisticated d
 - **Vector Store**: FAISS (Facebook AI Similarity Search)
 - **Extraction**: PyMuPDF (fitz) & Parallel OCR (Tesseract)
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Prerequisites
 - **Python 3.11+**
@@ -57,11 +100,11 @@ npm install
 npm run dev
 ```
 
-## 🔒 Privacy & Security
+## Privacy & Security
 DocMeant is built with a "Privacy by Design" philosophy. All neural processing, embedding generation, and vector storage happen locally in your VRAM and filesystem. 
 
-## ⚖️ License
+## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
-Built by [park-bit](https://github.com/park-bit)
+Built by [park-bit](https://github.com/park-bit) ; [support](https://www.chai4.me/park-bit)
