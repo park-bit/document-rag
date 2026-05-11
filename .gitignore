@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+build/
+dist/
+*.spec
+
+# Node/Next.js
+node_modules/
+.next/
+out/
+build/
+.env*.local
+npm-debug.log*
+
+# Application Specific
+hf_cache/
+pip_cache/
+tmp/
+*.pdf
+*.txt
+*.json
+!package.json
+!tsconfig.json
+!next.config.js
+!requirements.txt
+
+# OS
+.DS_Store
+Thumbs.db
+poppler/
+.env
+llm.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

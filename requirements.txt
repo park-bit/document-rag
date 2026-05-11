@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+python-multipart
+pypdf
+pytesseract
+pdf2image
+sentence-transformers
+faiss-cpu
+torch
+transformers
+numpy
+pillow
